@@ -1,0 +1,14 @@
+node_modules/
+dist/
+dist-electron/
+release/
+*.log
+.DS_Store
+
+# Configurações locais (copie .env.example para .env).
+.env
+.env.*
+!.env.example
+
+# Ferramentas temporárias de depuração (não versionadas)
+scripts/.*.mjs

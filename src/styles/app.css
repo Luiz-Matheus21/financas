@@ -1,0 +1,211 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Bolso — identidade visual do app.
+
+   Escuro por padrão (é onde se olha saldo à noite). O tema troca pelo atributo
+   data-tema no <html>; nenhuma cor é escrita solta nos componentes, tudo sai
+   das variáveis abaixo. Verde é dinheiro entrando, coral é dinheiro saindo —
+   essas duas nunca são usadas para outra coisa.
+--------------------------------------------------------------------------- */
+
+@theme {
+  --font-sans: 'Segoe UI Variable Display', 'Segoe UI', Inter, system-ui, -apple-system, sans-serif;
+  --font-mono: 'Cascadia Mono', 'Consolas', ui-monospace, monospace;
+
+  --radius-controle: 10px;
+  --radius-cartao: 16px;
+  --radius-pilula: 999px;
+
+  --color-fundo: var(--c-fundo);
+  --color-superficie: var(--c-superficie);
+  --color-elevado: var(--c-elevado);
+  --color-afundado: var(--c-afundado);
+  --color-linha: var(--c-linha);
+  --color-linha-suave: var(--c-linha-suave);
+  --color-tinta: var(--c-tinta);
+  --color-tinta-fraca: var(--c-tinta-fraca);
+  --color-tinta-tenue: var(--c-tinta-tenue);
+  --color-entra: var(--c-entra);
+  --color-sai: var(--c-sai);
+  --color-alerta: var(--c-alerta);
+  --color-info: var(--c-info);
+  --color-destaque: var(--c-destaque);
+  --color-marca: var(--c-marca);
+  --color-marca-solida: var(--c-marca-solida);
+}
+
+:root {
+  --c-fundo: #0f1115;
+  --c-superficie: #161a21;
+  --c-elevado: #1c212a;
+  --c-afundado: #0b0d11;
+  --c-linha: #262c38;
+  --c-linha-suave: #1e2430;
+  --c-tinta: #e8ebf2;
+  --c-tinta-fraca: #9aa3b5;
+  --c-tinta-tenue: #6b7385;
+  --c-entra: #2fd98f;
+  --c-sai: #fb7185;
+  --c-alerta: #fbbf24;
+  --c-info: #60a5fa;
+  --c-destaque: #a78bfa;
+  --c-marca: #2fd98f;
+  /* Verde de preenchimento, o mesmo nos dois temas.
+     `--c-marca` escurece no claro porque também serve de cor de TEXTO, e verde
+     claro sobre branco não se lê. Já um botão cheio tem tinta escura por cima,
+     então escurecer o fundo só tira o brilho da marca sem ganhar contraste
+     nenhum — daí os dois tokens. */
+  --c-marca-solida: #2fd98f;
+  --sombra-cartao: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.5);
+  --sombra-flutuante: 0 24px 64px -16px rgb(0 0 0 / 0.65);
+  --brilho-hover: 1.12;
+  --trilho: #2a3140;
+}
+
+[data-tema='light'] {
+  --c-fundo: #f5f6f8;
+  --c-superficie: #ffffff;
+  --c-elevado: #ffffff;
+  --c-afundado: #f0f2f5;
+  --c-linha: #e3e6ec;
+  --c-linha-suave: #eceef2;
+  --c-tinta: #14161c;
+  --c-tinta-fraca: #5c6474;
+  --c-tinta-tenue: #8b93a3;
+  --c-entra: #0f9d63;
+  --c-sai: #e11d48;
+  --c-alerta: #b45309;
+  --c-info: #2563eb;
+  --c-destaque: #7c3aed;
+  --c-marca: #0f9d63;
+  --c-marca-solida: #2fd98f;
+  --sombra-cartao: 0 1px 2px rgb(16 24 40 / 0.06), 0 8px 20px -14px rgb(16 24 40 / 0.18);
+  --sombra-flutuante: 0 24px 64px -20px rgb(16 24 40 / 0.24);
+  --brilho-hover: 0.96;
+  --trilho: #e3e6ec;
+}
+
+html,
+body,
+#raiz {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--c-fundo);
+  color: var(--c-tinta);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* Números de dinheiro sempre alinhados coluna a coluna. */
+.num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Hover por brilho: funciona sobre qualquer cor de botão, inclusive as das
+   marcas dos bancos, sem precisar declarar um hover para cada variante. */
+button:not(:disabled),
+a.acao {
+  transition: filter 0.15s ease, transform 0.06s ease, background-color 0.15s ease;
+}
+button:not(:disabled):hover,
+a.acao:hover {
+  filter: brightness(var(--brilho-hover));
+}
+button:not(:disabled):active {
+  transform: scale(0.985);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--c-marca);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--trilho) transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--trilho);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* A barra de título nativa fica sobreposta; esta faixa é arrastável. */
+.arrastar {
+  -webkit-app-region: drag;
+}
+.arrastar button,
+.arrastar input,
+.arrastar select,
+.arrastar a,
+.nao-arrastar {
+  -webkit-app-region: no-drag;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Escondo o calendário nativo do date: o campo já é estreito. */
+input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(0.6);
+  cursor: pointer;
+}
+[data-tema='light'] input[type='date']::-webkit-calendar-picker-indicator {
+  filter: none;
+}
+
+@keyframes surge {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.surge {
+  animation: surge 0.22s ease-out both;
+}
+
+@keyframes brilha {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.esqueleto {
+  position: relative;
+  overflow: hidden;
+  background: var(--c-elevado);
+}
+.esqueleto::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.06), transparent);
+  animation: brilha 1.4s infinite;
+}
